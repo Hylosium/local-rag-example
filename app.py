@@ -8,6 +8,7 @@ from rag import ChatPDF
 st.set_page_config(page_title="ChatPDF")
 
 
+
 def display_messages():
     st.subheader("Chat")
     for i, (msg, is_user) in enumerate(st.session_state["messages"]):

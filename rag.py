@@ -6,7 +6,10 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.prompts import PromptTemplate
-from langchain.vectorstores.utils import filter_complex_metadata
+from langchain_community.vectorstores.utils import filter_complex_metadata
+from langchain.globals import set_verbose
+set_verbose(True)
+
 
 
 class ChatPDF:
@@ -15,16 +18,23 @@ class ChatPDF:
     chain = None
 
     def __init__(self):
-        self.model = ChatOllama(model="mistral")
+        self.model = ChatOllama(base_url="http://192.168.100.9:11434", model="llama3")
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1024, chunk_overlap=100)
         self.prompt = PromptTemplate.from_template(
             """
-            <s> [INST] You are an assistant for question-answering tasks. Use the following pieces of retrieved context 
-            to answer the question. If you don't know the answer, just say that you don't know. Use three sentences
-             maximum and keep the answer concise. [/INST] </s> 
-            [INST] Question: {question} 
+            <|begin_of_text|><|start_header_id|>system<|end_header_id|>
+            You are an assistant for question-answering tasks, and your name is Dunkin.
+            I will write you in a language and YOU MUST respond with the language of the question.
+            (If is Spanish respond in Spanish)
+            Use the following pieces of retrieved context to answer the question.
+            If you don't know the answer, simply state that you don't know.
+            Keep your answer concise, using a maximum of three sentences.
+            Afterward you MUST WRITE a 5-bullet point summary.
+            <|eot_id|><|start_header_id|>user<|end_header_id|>
+            Question: {question} 
             Context: {context} 
-            Answer: [/INST]
+            <|eot_id|><|start_header_id|>assistant<|end_header_id|>
+            Answer: <|eot_id|>
             """
         )
 

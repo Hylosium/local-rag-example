@@ -1,5 +1,5 @@
 # local-rag-example
-Build your own ChatPDF and run them locally
+Build your own ChatPDF and run them locally with *llama3* or with an endpoint to *Ollama*.
 
 Dependencies:
 - langchain
